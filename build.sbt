@@ -57,21 +57,28 @@ def openVSCodeTask: Def.Initialize[Task[Unit]] =
       println(s"Path: $path")
       println(s"PathOut: $pathOut")
       s"code.cmd  --extensionDevelopmentPath=$path" ! log
-      ()
-    }.dependsOn(copyFileJSArtifactsToMedia)
+      () //.dependsOn(copyFileJSArtifactsToMedia)
+    }
     // .dependsOn(installDependencies)
 
 val commonSettings = Seq(
   scalaVersion := DependencyVersions.scala,
+  semanticdbEnabled := true,
+  semanticdbVersion := scalafixSemanticdb.revision,
+  
   // CommonJS
-  scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) 
+  scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule)
+    .withModuleKind(ModuleKind.ESModule) //need ESModule for testing
     .withModuleSplitStyle(
       ModuleSplitStyle.SmallModulesFor(List("viteview")))
   },
   scalacOptions ++=  Seq("-Yretain-trees",//necessary in zio-json if any case classes have default parameters
-    "-Xmax-inlines","60"), //setting max inlines to accomodate > 32 fields in case classes
+    "-Xmax-inlines","60", //setting max inlines to accomodate > 32 fields in case classes
+    "-Wunused:all"
+    ), 
 
   libraryDependencies ++= Dependencies.ziojson.value,  
+  libraryDependencies ++= Dependencies.scalatest.value,
   // libraryDependencies  ++= Dependencies.upickle.value,
   // libraryDependencies ++= Dependencies.borerJson.value,
   libraryDependencies ++= Dependencies.scalajsmacrotaskexecutor.value,
@@ -89,7 +96,6 @@ lazy val viteview = project
     scalaJSUseMainModuleInitializer := true,
   viteMainJSFolder := {
     val sourceMain = (Compile / fastLinkJSOutput ).value 
-    println(s"sourceMain $sourceMain")
     sourceMain
   },
   externalNpm := baseDirectory.value,
@@ -120,7 +126,6 @@ lazy val root = project
     // Tell ScalablyTyped that we manage `npm install` ourselves
     externalNpm := baseDirectory.value,
 
-    testFrameworks += new TestFramework("utest.runner.Framework")
     // publishMarketplace := publishMarketplaceTask.dependsOn(fullOptJS in Compile).value
   )
   .enablePlugins(

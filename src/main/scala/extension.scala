@@ -6,7 +6,7 @@ import scala.collection.immutable
 import scala.util.*
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
-import scala.scalajs.js.UndefOr
+
 
 import com.axiommd.webview.utils.Console
 

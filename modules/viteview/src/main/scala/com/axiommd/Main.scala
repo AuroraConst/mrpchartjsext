@@ -1,12 +1,12 @@
 package com.axiommd
 
 
-import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L.*
 import org.scalajs.dom
-// import vendor.highlightjs.hljs
+import com.axiommd.charts.ChartLaminar
 
-import scala.scalajs.js
-import scala.scalajs.js.annotation.JSImport
+
+
 
 object Main :
   def consoleOut(msg: String): Unit = {
@@ -15,12 +15,13 @@ object Main :
   @main def entrypoint(): Unit = 
 
     consoleOut ("Hello, world from console!!!!???")
-    println("Hello, world!")
+    println("Hello, world from println!!!")
     // Scala.js outputs to the browser dev console, not the sbt session
     // Always have the browser dev console open when developing web UIs.
-    println("-- Scala.js app start --")
 
 
     val element = dom.document.querySelector("#app")
     ModelFetch.fetchPatients
-    renderOnDomContentLoaded(element,LaminarRender())
+    
+  
+    renderOnDomContentLoaded(element,ChartLaminar())

@@ -1,18 +1,18 @@
 package com.axiommd
 
 import typings.vscode.mod as vscode
-import typings.vscode.anon.Dispose
+
 import typings.vscode.Thenable
 
 import scala.collection.immutable
-import scala.util.*
+
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSExportTopLevel
-import scala.scalajs.js.UndefOr
-import javax.swing.table.TableColumn
+
+
+
 // import upickle.default._
 import zio.json._
-import javax.xml.catalog.CatalogResolver
+
 import com.axiommd.webview.utils.*
 
 
@@ -65,6 +65,11 @@ class WebViewPanel (private var _panel: vscode.WebviewPanel,private val _extensi
     val scriptUri = webview.asWebviewUri(scriptPathOnDisk)
     val styleResetPath = vscode.Uri.joinPath(_extensionUri, "media", "reset.css")
     val stylesPathMainPath = vscode.Uri.joinPath(_extensionUri, "media", "vscode.css")
+    // val chartJsPathOnDisk = vscode.Uri.joinPath(_extensionUri, "modules/viteview/node_modules/chart.js/dist/", "Chart.bundle.js")
+    // val chartJsUri = webview.asWebviewUri(chartJsPathOnDisk)
+
+
+    
 
     val stylesResetUri = webview.asWebviewUri(styleResetPath)
     val stylesMainUri = webview.asWebviewUri(stylesPathMainPath)
@@ -86,11 +91,12 @@ class WebViewPanel (private var _panel: vscode.WebviewPanel,private val _extensi
 
 				<link href="${stylesResetUri}" rel="stylesheet">
 				<link href="${stylesMainUri}" rel="stylesheet">
+
 			</head>
 			<body>
         <div id="app"></div>
-
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+        
+				<script nonce="${nonce}" type="module" src="${scriptUri}"></script>
 			</html>
 
     """
