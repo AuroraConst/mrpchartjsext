@@ -1,9 +1,9 @@
 package com.axiommd
 
 import org.scalajs.dom
-import com.axiommd.charts.DataTypes
+
 import com.axiommd.charts.DataModel
-import com.axiommd.charts.DataTypes.MrpData
+
 import com.axiommd.charts.DataProcessing
 
 
@@ -30,11 +30,7 @@ object ModelFetch :
       .map(r => r.toOption.getOrElse(Nil))
       .foreach{ patients => 
         val mrpMap = DataProcessing.mrpPatients(patients)
-        val mrpDataList = mrpMap.values.toList
-        
-
-        
-        DataModel.dataVar.set( mrpDataList )
+        DataModel.mrpDataVar.set( mrpMap )
       }
 
 

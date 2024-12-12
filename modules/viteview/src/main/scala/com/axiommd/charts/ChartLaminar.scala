@@ -4,13 +4,19 @@ import scala.scalajs.js
 import org.scalajs.dom
 import scala.scalajs.js.JSConverters.*
 import typings.chartJs.mod.*
-import com.raquo.laminar.api.L.{*, given}
-import com.axiommd.charts.DataTypes.MrpData
+import com.raquo.laminar.api.L.*
+import com.axiommd.charts.DataTypes.Service
+import com.axiommd.Main
+
 
 
 object ChartLaminar:
   def apply () =
     ctag
+
+  
+  val servicesOrdered = Service.values.toList.sortBy(_.id).toIndexedSeq.zipWithIndex 
+  
   var optChart: Option[Chart] = None
   val ctag =  canvasTag(
       width := "100%",
@@ -29,11 +35,16 @@ object ChartLaminar:
         }
       ),
 
-      DataModel.dataSignal --> { data =>
+      DataModel.mrpDataSignal --> { mrpData =>
+        val mrpsOrdered = mrpData.keys.toList.sortBy( k => mrpData(k).patients.size)
         for (chart <- optChart) {
-          chart.data.labels = data.map(_.mrp).toJSArray
-          chart.data.datasets.get(0).data = data.map(_.patients.size.toDouble).toJSArray
-          // chart.data.datasets.get(1).data = data.map(_.value.toDouble*2).toJSArray
+          
+          chart.data.labels = mrpsOrdered.toJSArray
+
+          servicesOrdered.foreach{ service => 
+            chart.data.datasets.get(service._2).data =
+              mrpsOrdered.map{k => mrpData(k).servicePatientCount(service._1).toDouble}.toJSArray
+          }
           chart.update()
         }
       },
@@ -44,17 +55,44 @@ object ChartLaminar:
   val stackedChartConfig =
     new ChartConfiguration {
       `type` = ChartType.bar
+
+      
+      
       data = new ChartData {
         datasets = mrpServiceChartDatasets
       }
+      
       options = new ChartOptions {
+        maintainAspectRatio = false
+        legend = new ChartLegendOptions {
+          labels = new ChartLegendLabelOptions {
+            fontSize = 8
+            fontColor = "#FFFF00"
+          }
+
+        }
+
+
+
         scales = new ChartScales {
           xAxes = js.Array(new ChartXAxe {
+            ticks = new TickOptions {
+              fontSize = 8
+              rotation = 90
+              fontColor = "#AAFF00"
+
+            }
             stacked = true
           })
 
           yAxes = js.Array(new CommonAxe {
+            gridLines = new GridLineOptions {
+              color = "#AAFF00"
+            }
             ticks = new TickOptions {
+              
+              fontColor = "#AAFF00"
+
               beginAtZero = true
             }
             stacked = true
@@ -65,12 +103,12 @@ object ChartLaminar:
   end stackedChartConfig
 
 
-  lazy val mrpServiceChartDatasets = DataTypes.servicesMap.values.map{service =>
+  lazy val mrpServiceChartDatasets = servicesOrdered.map{service =>
     new ChartDataSets {
-      label = service.id
-      backgroundColor = service.color
+      label = s"${service._1 }"
+      backgroundColor = service._1.color
       borderWidth = 1
-      data = js.Array(0)
+      data = js.Array()
     }
   }.toJSArray
 

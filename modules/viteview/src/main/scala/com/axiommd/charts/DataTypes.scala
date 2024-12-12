@@ -2,41 +2,68 @@ package com.axiommd.charts
 
 
 import com.axiom.model.shared.dto.Patient
+import scala.collection.mutable.LinkedHashMap
+import com.axiommd.Main
 
 object DataTypes :
   enum Service(_id:String, _color:String):
     def id = _id
     def color = _color
+    def serviceFromOrdinal(i:Int) = Service.values(i)
 
-    case Med               extends Service("MED",         "#FFFF66")
-    case MedCard           extends Service("MEDCARD",     "#FFdd66")
-    case Hospitalist       extends Service("HOSPITALIST", "#C71585")
-    case HospitalistNoFlag extends Service("HOSPNOFLAG",  "#1E90FF")
-    case MCTU              extends Service("MEDCTU",      "#0000e0") 
-    case TelCTU            extends Service("TELCTU",      "#00CCCC") 
-    case TelAcon           extends Service("TELACON",     "#44ff33") 
-    case CardTele          extends Service("TELCARD",     "#FF0000") 
-    case MedTele           extends Service("TELMED",      "#FF69B4") 
-    case PalOnc            extends Service("PALONC",      "#FFEE66") 
-    case MedOnc            extends Service("MEDONCOLGY",  "#FF00FF") 
-    case Acon              extends Service("ACON",        "#F322EE") 
-    case MedRenal          extends Service("MEDRENAL",    "#CDA776") 
-    case TelRenal          extends Service("TELRENAL",    "#EFC998") 
-    case Stroke            extends Service("STROKE",      "#FF5733") 
-    case StrokeTele        extends Service("TELSTROKE",   "#BBAAAA") 
+    case MED               extends Service("MED",         "#FF7F50")
+    case MEDCARD           extends Service("MEDCARD",     "#FFdd66")
+    case HOSPITALIST       extends Service("HOSPITALIST", "#DE3163")
+    case HOSPITALISTNOFLAG extends Service("HOSPNOFLAG",  "#1E90FF")
+    case MEDCTU            extends Service("MEDCTU",      "#0000e0") 
+    case TELCTU            extends Service("TELCTU",      "#00CCCC") 
+    case TELACON           extends Service("TELACON",     "#44ff33") 
+    case TELCARD           extends Service("TELCARD",     "#FF0000") 
+    case TELMED            extends Service("TELMED",      "#FF69B4") 
+    case PALONC            extends Service("PALONC",      "#FFEE66") 
+    case MEDONC            extends Service("MEDONCOLGY",  "#CCCCFF") 
+    case ACON              extends Service("ACON",        "#F322EE") 
+    case MEDRENAL          extends Service("MEDRENAL",    "#CDA776") 
+    case TELRENAL          extends Service("TELRENAL",    "#EFC998") 
+    case STROKE            extends Service("STROKE",      "#FF5733") 
+    case TELSTROKE         extends Service("TELSTROKE",   "#6495ED") 
     case MH                extends Service("MH",          "#00AA00") 
-    case Forensics         extends Service("FORENSICS",   "#CCBBCC") 
-    case Undefined         extends Service("UNDEFINED",   "#333333") 
+    case FORENSICS         extends Service("FORENSICS",   "#CCBBCC") 
+    case UNDEFINED         extends Service("UNDEFINED",   "#333333") 
 
-   
-  lazy val servicesMap = Service.values.map(s => (s.id,s)).toMap
+  def getServiceByName(name: String): Service = 
+    try
+      Service.valueOf(name)
+    catch
+      case _: NoSuchElementException => Service.UNDEFINED
+
+
 
   import Service.* 
-  case class MrpData(mrp:String, patients:List[Patient]) :
-    lazy val servicePatients = patients.groupBy(_.service.getOrElse(""))
-      .map{(id,patient) => servicesMap.get(id).getOrElse(Undefined) -> patient}
 
-    lazy val servicePatientCount = servicePatients.map{case (k,v) => k -> v.size}
-    lazy val sortedServiceKeys = servicePatients.keys.toList.sortBy(_.id)
+  case class MrpsPatientList(mrps:List[String],patients:List[Patient])
+  
+  
+
+  case class MrpData(mrp:String, patients:List[Patient]) :
+    private def convertToHospitalist (s:Service,p:Patient)   =
+      if(s == MED && (p.hosp.getOrElse("N").toUpperCase() == "Y")) 
+        HOSPITALIST -> p
+          else  
+        s -> p
+
+    
+    private def servicePatient(p:Patient) = 
+      val s = p.service.map{getServiceByName}.getOrElse(UNDEFINED)
+      convertToHospitalist(s,p)
+
+
+    lazy val servicePatients =  patients.map {  servicePatient}
+      .groupBy(  (a,_) => a)
+      .map{(k,l) => k -> l.map{(_,p) => p }}
+
+    def  servicePatientCount(s:Service) = servicePatients.get(s).map{x => x.size}.getOrElse(0)
+
+
 
 end DataTypes

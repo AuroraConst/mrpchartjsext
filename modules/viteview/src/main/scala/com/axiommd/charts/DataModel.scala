@@ -9,8 +9,8 @@ object DataModel :
   // case class MRPData(id: DataItemID, mrpLabel: String, value: Int)
 
 
-  val dataVar = Var[List[MrpData]](List())
-  val dataSignal = dataVar.signal
+  val mrpDataVar = Var[Map[String,MrpData]](Map())
+  val mrpDataSignal = mrpDataVar.signal
 
 
     
@@ -22,13 +22,14 @@ end DataModel
 
 object DataProcessing :
   import com.axiom.model.shared.dto.Patient
-  import DataTypes.{MrpData,Service}
+  import DataTypes.MrpData
 
   
-  def services(pts:List[Patient]) :List[String] =  pts.groupBy(_.service.getOrElse("")).keys.toList
 
+
+  //TODO   (maps to each bar horizontally)
   def mrpPatients(allPatients:List[Patient]) :Map[String,MrpData] =  
     allPatients.groupBy(_.mrp.getOrElse(""))
-      .map{(mrp,patient) => mrp -> MrpData(mrp,patient)}
+      .map{case (mrp,patient) => mrp -> MrpData(mrp,patient)}
 
 
