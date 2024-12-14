@@ -1,4 +1,4 @@
-package com.axiom.model.js
+package package com.axiommd
 
 import org.scalatest._, Assertions._, funspec.AsyncFunSpec 
 import org.scalatest.flatspec._, Assertions.*
