@@ -1,6 +1,6 @@
 package com.axiommd.charts
-import com.raquo.laminar.api.L.*
 import com.axiommd.charts.DataTypes.MrpData
+import com.raquo.laminar.api.L._
 
 
 object DataModel :

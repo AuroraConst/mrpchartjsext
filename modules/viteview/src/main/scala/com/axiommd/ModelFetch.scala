@@ -1,10 +1,8 @@
 package com.axiommd
 
-import org.scalajs.dom
-
 import com.axiommd.charts.DataModel
-
 import com.axiommd.charts.DataProcessing
+import org.scalajs.dom
 
 
 

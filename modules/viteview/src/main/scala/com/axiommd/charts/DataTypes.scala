@@ -2,8 +2,8 @@ package com.axiommd.charts
 
 
 import com.axiom.model.shared.dto.Patient
-import scala.collection.mutable.LinkedHashMap
-import com.axiommd.Main
+
+
 
 object DataTypes :
   enum Service(_id:String, _color:String):

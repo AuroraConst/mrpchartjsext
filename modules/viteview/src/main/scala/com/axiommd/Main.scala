@@ -1,9 +1,9 @@
 package com.axiommd
 
 
-import com.raquo.laminar.api.L.*
-import org.scalajs.dom
 import com.axiommd.charts.ChartLaminar
+import com.raquo.laminar.api.L._
+import org.scalajs.dom
 
 
 

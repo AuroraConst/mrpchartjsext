@@ -1,12 +1,13 @@
 package com.axiommd.charts
 
-import scala.scalajs.js
-import org.scalajs.dom
-import scala.scalajs.js.JSConverters.*
-import typings.chartJs.mod.*
-import com.raquo.laminar.api.L.*
 import com.axiommd.charts.DataTypes.Service
-import com.axiommd.Main
+import com.raquo.laminar.api.L._
+import org.scalajs.dom
+import typings.chartJs.mod._
+
+import scala.scalajs.js
+import scala.scalajs.js.JSConverters._
+
 
 
 
