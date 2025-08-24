@@ -23,7 +23,7 @@ object ModelFetch :
   def fetchPatients = 
     import com.axiom.model.shared.dto.Patient 
     
-    Fetch.get("http://localhost:8080/patientsjson").future.text(abortController)
+    Fetch.get("http://localhost:8083/patientsjson").future.text(abortController)
       .map(s => s.data.fromJson[List[Patient]])
       .map(r => r.toOption.getOrElse(Nil))
       .foreach{ patients => 
