@@ -1,4 +1,4 @@
-package package com.axiommd
+package com.axiommd
 
 import org.scalatest._, Assertions._, funspec.AsyncFunSpec 
 import org.scalatest.flatspec._, Assertions.*
@@ -12,8 +12,6 @@ import scala.scalajs.concurrent.JSExecutionContext
 import scala.concurrent.{Future,Promise}
 
 import zio.json._
-import com.axiom.model.shared.dto.Patient
-import com.axiom.model.js.Fetch
 
 
 

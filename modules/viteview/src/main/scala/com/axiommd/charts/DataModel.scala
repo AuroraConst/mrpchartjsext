@@ -12,11 +12,6 @@ object DataModel :
   val mrpDataVar = Var[Map[String,MrpData]](Map())
   val mrpDataSignal = mrpDataVar.signal
 
-
-    
-    
-
-
 end DataModel
 
 

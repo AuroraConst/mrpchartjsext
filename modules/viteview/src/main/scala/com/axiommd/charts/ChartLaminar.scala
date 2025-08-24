@@ -7,6 +7,10 @@ import typings.chartJs.mod._
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
+import com.axiommd.Main.consoleOut
+import scala.collection.immutable.LazyList.cons
+import typings.std.stdStrings.connect
+
 
 
 
@@ -64,6 +68,71 @@ object ChartLaminar:
       }
       
       options = new ChartOptions {
+
+
+      onResize = (chart:Chart, size) => {
+        import scala.scalajs.js.UndefOr
+        import scala.scalajs.js.JSConverters._
+        consoleOut("resizing and creating button!!!!")
+        // consoleOut(s"get by id ${Some(dom.document.getElementById("btn"))}")
+
+        // consoleOut(s"${Option(dom.document.getElementById("btn")) == None}")
+
+        def undefNullOption(o : js.Object): Option[js.Object] = if (o== js.undefined) None else Option(o)
+
+
+
+        //TODO [WORKING] HERE
+        val btn  = Option( dom.document.getElementById("btn")).map{_.asInstanceOf[dom.html.Button]}
+            .getOrElse{
+              val newButton = dom.document.createElement("BUTTON").asInstanceOf[dom.html.Button]
+              consoleOut("created Button!!!!  $newButton")
+              
+              val btnText = dom.document.createTextNode("Reset") 
+              newButton.id = "btn"
+              newButton.classList.add("hello")
+              newButton.style.position = "relative"
+              newButton.appendChild(btnText)
+              newButton
+            }
+
+        val parentElement = dom.document.getElementById("app")   
+        parentElement.appendChild(btn)
+        btn.style.left = Option(chart.width.asInstanceOf[Double]).map{_ - 50 + "px"}.getOrElse("")
+        val parentResult = for { 
+          canvas <- undefNullOption(chart.canvas).map{_.asInstanceOf[dom.html.Canvas]}
+          parentNode <- undefNullOption(canvas.parentNode)
+        } {
+          consoleOut(s"ParentNode: ${parentNode}")
+          // parentNode.appendChild(btn)
+        }
+
+        consoleOut(s"ParentResult: ${parentResult}")
+        // consoleOut(s"Canvas: ${Option(chart.canvas)}")
+
+        // consoleOut(s"${btn}, ${parentElement}")
+        
+        // if(chart.canvas !=null && chart.canvas.parentNode!=null) {
+        //   chart.canvas.parentNode.appendChild(btn)
+
+        //  }  
+        // // import scala.scalajs.js.JSConverters._
+        // chart.canvas.parentNode.appendChild(btn)
+
+        // dom.console.log(s"${chart}")  
+        // consoleOut(s"HEY!!!!!!!!!!!!  ${chart}")
+
+        
+        
+          
+        // consoleOut(s"HEY!!!!!!!!!!!!  ${Some(chart.canvas)}")   
+        // chart.canvas.parentNode.appendChild(btn)
+          // chart.canvas.appendChild(btn)
+
+      }      
+
+
+        
         maintainAspectRatio = false
         legend = new ChartLegendOptions {
           labels = new ChartLegendLabelOptions {

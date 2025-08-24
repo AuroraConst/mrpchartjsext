@@ -21,7 +21,7 @@ object DataTypes :
     case TELCARD           extends Service("TELCARD",     "#FF0000") 
     case TELMED            extends Service("TELMED",      "#FF69B4") 
     case PALONC            extends Service("PALONC",      "#FFEE66") 
-    case MEDONC            extends Service("MEDONCOLGY",  "#CCCCFF") 
+    case MEDONCOLGY        extends Service("MEDONCOLGY",  "#CCCCFF") 
     case ACON              extends Service("ACON",        "#F322EE") 
     case MEDRENAL          extends Service("MEDRENAL",    "#CDA776") 
     case TELRENAL          extends Service("TELRENAL",    "#EFC998") 

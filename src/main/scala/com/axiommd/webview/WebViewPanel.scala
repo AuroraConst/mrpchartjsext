@@ -94,7 +94,7 @@ class WebViewPanel (private var _panel: vscode.WebviewPanel,private val _extensi
 
 			</head>
 			<body>
-        <div id="app"></div>
+        <div id="app" width="100%" height="100%"></div>
         
 				<script nonce="${nonce}" type="module" src="${scriptUri}"></script>
 			</html>

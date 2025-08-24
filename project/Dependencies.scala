@@ -35,7 +35,7 @@ object Dependencies {
 
   val aurorajslibs = Def.setting {
     Seq(
-       "com.axiom" %%% "dataimportcsv3s" % "0.0.1-SNAPSHOT"
+       "com.axiom" %%% "nlites_dataimportcsv3s" % "0.0.1-SNAPSHOT"
     )
   }
 
